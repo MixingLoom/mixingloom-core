@@ -12,19 +12,22 @@ package org.mixingloom.preloader.watcher {
 		private var activePatchers:Dictionary = new Dictionary();
 		private var patchers:Vector.<IPatcher>;
 		private var applyingPatch:Boolean = false;
-		private var notifier:IPatchNotifier;
-		private var bytes:ByteArray;
+		private var _notifier:IPatchNotifier;
+		private var context:SwfContext;
 		private var type:InvocationType;
 
-		public function applyPatches( notifier:IPatchNotifier, bytes:ByteArray, invocationType:InvocationType ):void {
+		public function set notifier( value:IPatchNotifier ):void {
+			this._notifier = value;
+		}
+		
+		public function applyPatches( invocationType:InvocationType, context:SwfContext ):void {
 			
 			if ( applyingPatch ) {
 				throw new Error( "What the fuck?" );
 			}
 
-			this.notifier = notifier;
-			this.bytes = bytes;
-			this.type = type;
+			this.context = context;
+			this.type = invocationType;
 
 			applyingPatch = true;
 
@@ -34,16 +37,15 @@ package org.mixingloom.preloader.watcher {
 		private function startNextPatch():void {
 			if ( !allPatchesComplete ) {
 				var patch:IPatcher = patchers.shift();
-				var context:SwfContext = new SwfContext();
-				context.swfBytes = bytes;
-				patch.swfContext = context;
-				patch.apply( this, type );
+				
+				patch.apply( type, context );
 			} else {
-				notifier.allPatchesComplete();
+				_notifier.allPatchesComplete();
 			}
 		}
 		
 		public function registerPatcher( patcher:IPatcher ):void {
+			patcher.applier = this;
 			patchers.push( patcher );
 		}
 		

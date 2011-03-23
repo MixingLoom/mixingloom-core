@@ -12,7 +12,6 @@ import flash.events.IOErrorEvent;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 import flash.utils.ByteArray;
-
 import flash.utils.Endian;
 
 import org.as3commons.bytecode.abc.AbcFile;
@@ -26,22 +25,11 @@ import org.as3commons.bytecode.util.SWFSpec;
 import org.mixingloom.SwfContext;
 import org.mixingloom.SwfTag;
 import org.mixingloom.invocation.InvocationType;
+import org.mixingloom.patcher.AbstractPatcher;
 import org.mixingloom.patcher.IPatcher;
 import org.mixingloom.preloader.watcher.IPatcherApplier;
 
-public class RevealPrivatesPatcher implements IPatcher {
-
-  private var _swfContext:SwfContext;
-
-  private var applier:IPatcherApplier;
-
-  public function get swfContext():SwfContext {
-    return _swfContext;
-  }
-
-  public function set swfContext( _swfContext:SwfContext ):void {
-    this._swfContext = _swfContext;
-  }
+public class RevealPrivatesPatcher extends AbstractPatcher {
 
   public var classTagName:String;
 
@@ -53,9 +41,7 @@ public class RevealPrivatesPatcher implements IPatcher {
     this.propertyOrMethodName = propertyOrMethodName;
   }
 
-  public function apply( applier:IPatcherApplier, invocationType:InvocationType ):void {
-    this.applier = applier;
-
+  override public function apply( invocationType:InvocationType, swfContext:SwfContext ):void {
     applier.startPatching( this );
 
     var uncompressedSwf:ByteArray = uncompressSwf(swfContext.swfBytes);

@@ -1,4 +1,6 @@
 package org.mixingloom.invocation {
+	import flash.net.URLRequest;
+
 	public class InvocationType {
 
 		public static const FRAME2:String = "frame2";
@@ -6,19 +8,19 @@ package org.mixingloom.invocation {
 		public static const MODULE:String = "module";
 
 		private var _type:String;
-		private var _uri:String;
+		private var _url:URLRequest;
 		
 		public function get type():String {
 			return _type;
 		}
 
-		public function get uri():String {
-			return _uri;
+		public function get uri():URLRequest {
+			return _url;
 		}
 
-		public function InvocationType( type:String, uri:String=null ) {
+		public function InvocationType( type:String, url:URLRequest=null ) {
 			this._type = type;
-			this._uri = uri;
+			this._url = url;
 		}
 	}
 }

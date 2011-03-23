@@ -1,19 +1,13 @@
 package patcher {
 import org.mixingloom.SwfContext;
 import org.mixingloom.invocation.InvocationType;
-	import org.mixingloom.patcher.IPatcher;
-	import org.mixingloom.preloader.watcher.IPatcherApplier;
+import org.mixingloom.patcher.AbstractPatcher;
+import org.mixingloom.patcher.IPatcher;
+import org.mixingloom.preloader.watcher.IPatcherApplier;
 
-	public class SamplePatcher implements IPatcher {
-		public function get swfContext():SwfContext {
-			return null;	
-		}
+	public class SamplePatcher extends AbstractPatcher {
 
-		public function set swfContext( context:SwfContext ):void {
-			
-		}
-		
-		public function apply( applier:IPatcherApplier, invocationType:InvocationType ):void {
+		override public function apply( invocationType:InvocationType, swfContext:SwfContext ):void {
 			applier.startPatching( this );
 			applier.completePatching( this );
 		}

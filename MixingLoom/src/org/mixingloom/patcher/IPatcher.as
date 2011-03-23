@@ -4,9 +4,9 @@ import org.mixingloom.invocation.InvocationType;
 	import org.mixingloom.preloader.watcher.IPatcherApplier;
 
 	public interface IPatcher {
-		function get swfContext():SwfContext;
-		function set swfContext( context:SwfContext ):void;
+		function get applier():IPatcherApplier;
+		function set applier( value:IPatcherApplier ):void;
 
-		function apply( applier:IPatcherApplier, invocationType:InvocationType ):void;
+		function apply( invocationType:InvocationType, swfContext:SwfContext ):void;
 	}
 }
