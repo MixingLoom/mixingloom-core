@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="org.mixingloom.preloader.AbstractPreloader"/>
+    <classEntry path="org.mixingloom.patcher.IPatcher"/>
+    <classEntry path="org.mixingloom.preloader.watcher.IPatcherApplier"/>
+    <classEntry path="org.mixingloom.preloader.watcher.PatcherApplierImpl"/>
+    <classEntry path="org.mixingloom.invocation.InvocationType"/>
+    <classEntry path="org.mixingloom.preloader.IPatchNotifier"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
