@@ -1,6 +1,7 @@
 package org.mixingloom.preloader {
 	import flash.display.Sprite;
 	import flash.events.TimerEvent;
+	import flash.utils.ByteArray;
 	import flash.utils.Timer;
 	
 	import mx.events.FlexEvent;
@@ -29,12 +30,12 @@ package org.mixingloom.preloader {
 
 			loader.removeEventListener(FlexEvent.PRELOADER_DOC_FRAME_READY, handleFrame2Ready );
 
-			processPatchers();
+			processPatchers( loaderInfo.bytes );
 		}
 		
 
-		protected function processPatchers():void {
-			applier.applyPatches( this );
+		protected function processPatchers( bytes:ByteArray ):void {
+			applier.applyPatches( this, bytes, null );
 		}
 
 		protected function registerPatcher( patcher:IPatcher ):void {
