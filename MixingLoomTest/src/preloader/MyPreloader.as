@@ -1,8 +1,9 @@
 package preloader {
 	import org.mixingloom.preloader.AbstractPreloader;
 	import org.mixingloom.preloader.IPatchNotifier;
-	
-	import patcher.SampleAsyncPatcher;
+
+import patcher.RevealPrivatesPatcher;
+import patcher.SampleAsyncPatcher;
 	import patcher.SamplePatcher;
 	
 	public class MyPreloader extends AbstractPreloader {
@@ -11,7 +12,8 @@ package preloader {
 			super.setupPatchers();
 			
 			registerPatcher( new SamplePatcher() );
-			registerPatcher( new SampleAsyncPatcher( 5000 ) );	
+			//registerPatcher( new SampleAsyncPatcher( 5000 ) );
+      registerPatcher( new RevealPrivatesPatcher("blah/Foo", "getPrivateBar") );
 		}
 		
 		public function MyPreloader() {
