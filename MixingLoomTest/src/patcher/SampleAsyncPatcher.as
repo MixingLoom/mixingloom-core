@@ -2,8 +2,9 @@ package patcher
 {
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
-	
-	import org.mixingloom.invocation.InvocationType;
+
+import org.mixingloom.SwfContext;
+import org.mixingloom.invocation.InvocationType;
 	import org.mixingloom.patcher.IPatcher;
 	import org.mixingloom.preloader.watcher.IPatcherApplier;
 	
@@ -18,12 +19,12 @@ package patcher
 			timer.addEventListener(TimerEvent.TIMER_COMPLETE, handleTimerComplete );
 		}
 		
-		public function get swfContext():*
+		public function get swfContext():SwfContext
 		{
 			return null;
 		}
 		
-		public function set swfContext(context:*):void
+		public function set swfContext(context:SwfContext):void
 		{
 		}
 		
