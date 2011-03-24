@@ -4,6 +4,12 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MixingLoom/MixingLoom.iml" filepath="$PROJECT_DIR$/MixingLoom/MixingLoom.iml" />
       <module fileurl="file://$PROJECT_DIR$/MixingLoomTest/MixingLoomTest.iml" filepath="$PROJECT_DIR$/MixingLoomTest/MixingLoomTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MixingLoomTestAppDesktop/MixingLoomTestAppDesktop.iml" filepath="$PROJECT_DIR$/MixingLoomTestAppDesktop/MixingLoomTestAppDesktop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MixingLoomTestAppWithCustomRSL/MixingLoomTestAppWithCustomRSL.iml" filepath="$PROJECT_DIR$/MixingLoomTestAppWithCustomRSL/MixingLoomTestAppWithCustomRSL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MixingLoomTestAppWithFrameworkRSLs/MixingLoomTestAppWithFrameworkRSLs.iml" filepath="$PROJECT_DIR$/MixingLoomTestAppWithFrameworkRSLs/MixingLoomTestAppWithFrameworkRSLs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MixingLoomTestAppWithModule/MixingLoomTestAppWithModule.iml" filepath="$PROJECT_DIR$/MixingLoomTestAppWithModule/MixingLoomTestAppWithModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MixingLoomTestLib/MixingLoomTestLib.iml" filepath="$PROJECT_DIR$/MixingLoomTestLib/MixingLoomTestLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../mixingloom-patchers/RevealPrivatesPatcher/RevealPrivatesPatcher.iml" filepath="$PROJECT_DIR$/../mixingloom-patchers/RevealPrivatesPatcher/RevealPrivatesPatcher.iml" />
     </modules>
   </component>
 </project>
