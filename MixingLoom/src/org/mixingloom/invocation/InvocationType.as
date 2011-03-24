@@ -14,7 +14,7 @@ package org.mixingloom.invocation {
 			return _type;
 		}
 
-		public function get uri():URLRequest {
+		public function get url():URLRequest {
 			return _url;
 		}
 

@@ -22,10 +22,7 @@ package org.mixingloom.preloader.watcher {
 		
 		public function applyPatches( invocationType:InvocationType, context:SwfContext ):void {
 			
-			if ( applyingPatch ) {
-				throw new Error( "What the fuck?" );
-			}
-
+			trace( invocationType.type + ' ' + (invocationType.url?invocationType.url.url:'' ) );
 			this.context = context;
 			this.type = invocationType;
 

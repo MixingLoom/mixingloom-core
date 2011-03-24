@@ -8,6 +8,7 @@
     <classEntry path="org.mixingloom.invocation.InvocationType"/>
     <classEntry path="org.mixingloom.preloader.IPatchNotifier"/>
     <classEntry path="org.mixingloom.patcher.AbstractPatcher"/>
+    <classEntry path="org.mixingloom.byteLoader.ModifiedByteLoader"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
