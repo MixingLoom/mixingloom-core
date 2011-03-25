@@ -8,17 +8,17 @@ package org.mixingloom.invocation {
 		public static const MODULE:String = "module";
 
 		private var _type:String;
-		private var _url:URLRequest;
+		private var _url:String;
 		
 		public function get type():String {
 			return _type;
 		}
 
-		public function get url():URLRequest {
+		public function get url():String {
 			return _url;
 		}
 
-		public function InvocationType( type:String, url:URLRequest=null ) {
+		public function InvocationType( type:String, url:String=null ) {
 			this._type = type;
 			this._url = url;
 		}

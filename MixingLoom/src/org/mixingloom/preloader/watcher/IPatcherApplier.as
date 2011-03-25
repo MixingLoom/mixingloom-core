@@ -1,20 +1,15 @@
 package org.mixingloom.preloader.watcher {
-	import flash.utils.ByteArray;
-	
 	import org.mixingloom.SwfContext;
 	import org.mixingloom.invocation.InvocationType;
 	import org.mixingloom.patcher.IPatcher;
-	import org.mixingloom.preloader.IPatchNotifier;
 
 	public interface IPatcherApplier {
-		function registerPatcher( patcher:IPatcher ):void;
-		function startPatching( patcher:IPatcher ):void;
-		function completePatching( patcher:IPatcher ):void;
+		function apply():void;
 		
-		function applyPatches( invocationType:InvocationType, swfContext:SwfContext ):void;
+		function set patchers( patchers:Vector.<IPatcher> ):void;
+		function set invocationType(value:InvocationType):void;
+		function set swfContext(value:SwfContext):void;
 		
-		function get allPatchesComplete():Boolean;
-		
-		function set notifier( value:IPatchNotifier ):void;
+		function setCallBack( value:Function, args:Array=null ):void;
 	}
 }

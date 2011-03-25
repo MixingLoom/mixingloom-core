@@ -1,63 +1,78 @@
 package org.mixingloom.preloader.watcher {
-	import flash.utils.ByteArray;
-	import flash.utils.Dictionary;
-	
 	import org.mixingloom.SwfContext;
 	import org.mixingloom.invocation.InvocationType;
 	import org.mixingloom.patcher.IPatcher;
-	import org.mixingloom.preloader.IPatchNotifier;
 
 	public class PatcherApplierImpl implements IPatcherApplier {
 
-		private var activePatchers:Dictionary = new Dictionary();
-		private var patchers:Vector.<IPatcher>;
-		private var applyingPatch:Boolean = false;
-		private var _notifier:IPatchNotifier;
-		private var context:SwfContext;
-		private var type:InvocationType;
+		private var callBack:Function;
+		private var callBackArgs:Array;
 
-		public function set notifier( value:IPatchNotifier ):void {
-			this._notifier = value;
+		private var _patchers:Vector.<IPatcher>;
+		private var _swfContext:SwfContext;
+		private var _invocationType:InvocationType;
+
+		public function get allPatchesComplete():Boolean {
+			return ( _patchers.length == 0 );
+		}
+
+		public function get invocationType():InvocationType
+		{
+			return _invocationType;
+		}
+
+		public function set invocationType(value:InvocationType):void
+		{
+			_invocationType = value;
+		}
+
+		public function get swfContext():SwfContext
+		{
+			return _swfContext;
+		}
+
+		public function set swfContext(value:SwfContext):void
+		{
+			_swfContext = value;
+		}
+
+		public function set patchers( value:Vector.<IPatcher> ):void {
+			_patchers = value.slice();
 		}
 		
-		public function applyPatches( invocationType:InvocationType, context:SwfContext ):void {
+		public function apply():void {
 			
-			trace( invocationType.type + ' ' + (invocationType.url?invocationType.url.url:'' ) );
-			this.context = context;
-			this.type = invocationType;
-
-			applyingPatch = true;
-
+			trace( invocationType.type + ' ' + invocationType.url  );
+			//applyingPatch = true;
 			startNextPatch();
 		}
-		
+
+		public function setCallBack( value:Function, args:Array=null ):void {
+			this.callBack = value;
+			this.callBackArgs = args;
+		}
+
+		protected function invokeCallBack():void {
+			if ( callBack != null ) {
+				callBack.apply( null, callBackArgs );
+			}
+		}
+
 		private function startNextPatch():void {
 			if ( !allPatchesComplete ) {
-				var patch:IPatcher = patchers.shift();
-				
-				patch.apply( type, context );
+				var patcher:IPatcher = _patchers.shift();
+				patcher.setCallBack( handleComplete, [patcher] );
+				patcher.apply( invocationType, swfContext );
 			} else {
-				_notifier.allPatchesComplete();
+				invokeCallBack();
 			}
 		}
 		
-		public function registerPatcher( patcher:IPatcher ):void {
-			patcher.applier = this;
-			patchers.push( patcher );
-		}
-		
-		public function startPatching( patcher:IPatcher ):void {
-			activePatchers[ patcher ] = true;
-		}
+		private function handleComplete( patcher:IPatcher ):void {
+			//clean up
+			patcher.setCallBack( null );
 
-		public function completePatching( patcher:IPatcher ):void {
-			delete activePatchers[ patcher ];
-			
 			startNextPatch();
-		}
-		
-		public function get allPatchesComplete():Boolean {
-			return ( patchers.length == 0 );
 		}
 
 		public function PatcherApplierImpl() {

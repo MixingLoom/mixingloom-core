@@ -4,7 +4,15 @@
     <option name="DO_BUILD" value="true" />
     <option name="OUTPUT_TYPE" value="Library" />
     <option name="OUTPUT_FILE_NAME" value="MixingLoom.swc" />
-    <option name="TARGET_PLAYER_VERSION" value="10.0.0" />
+    <option name="TARGET_PLAYER_VERSION" value="10.2.0" />
+    <option name="NAMESPACE_AND_MANIFEST_FILE_INFO_LIST">
+      <list>
+        <NamespaceAndManifestFileInfo>
+          <option name="NAMESPACE" value="library://ns.mixingloom.org/flex/spark" />
+          <option name="MANIFEST_FILE_PATH" value="$MODULE_DIR$/loom-manifest.xml" />
+        </NamespaceAndManifestFileInfo>
+      </list>
+    </option>
     <option name="VERSION" value="3" />
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
@@ -13,7 +21,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
     </content>
-    <orderEntry type="jdk" jdkName="flex_sdk_4.1.0.16076 (player 10)" jdkType="Flex SDK Type" />
+    <orderEntry type="jdk" jdkName="flex_sdk_4.5.0.20135 (player 10.2)" jdkType="Flex SDK Type" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library>

@@ -7,7 +7,7 @@
 package org.mixingloom.tests
 {
 
-import org.flexunit.Assert;
+import org.flexunit.asserts.assertTrue;
 import org.mixingloom.SwfContext;
 import org.mixingloom.byteLoader.ModifiedByteLoader;
 
@@ -20,7 +20,7 @@ public class ModifiedByteLoaderTest
     var modifiedByteLoader:ModifiedByteLoader = new ModifiedByteLoader();
     modifiedByteLoader.notifier = new MockPatchNotifier();
     modifiedByteLoader.applyModificiations(new SwfContext());
-    Assert.assertTrue(true);
+    assertTrue(true);
   }
 
 }
