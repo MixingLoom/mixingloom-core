@@ -1,11 +1,14 @@
 package org.mixingloom.managers {
-	import mx.events.FlexEvent;
+import flash.events.Event;
+import flash.utils.ByteArray;
+
+import mx.events.FlexEvent;
 	import mx.events.RSLEvent;
 	import mx.preloaders.Preloader;
-	
-	import org.mixingloom.SwfContext;
-	import org.mixingloom.byteCode.ByteParser;
-	import org.mixingloom.byteCode.ModifiedByteLoader;
+
+  import org.mixingloom.SwfContext;
+  import org.mixingloom.SwfTag;
+  import org.mixingloom.byteCode.ByteParser;
 	import org.mixingloom.core.LoomCrossDomainRSLItem;
 	import org.mixingloom.invocation.InvocationType;
 	import org.mixingloom.patcher.IPatcher;
@@ -16,7 +19,6 @@ package org.mixingloom.managers {
 		private var patchers:Vector.<IPatcher>;
 		private var _preloader:Preloader;
 		private var _rslItemList:Array;
-		private var frame2Context:SwfContext;
 		
 		public function createApplier( invocationType:InvocationType, swfContext:SwfContext ):IPatcherApplier {
 			var applier:IPatcherApplier = new PatcherApplierImpl();
@@ -41,17 +43,26 @@ package org.mixingloom.managers {
 
 		public function set preloader( value:Preloader ):void {
 
-			if ( _preloader ) {
-				_preloader.removeEventListener( FlexEvent.PRELOADER_DOC_FRAME_READY, 
-					handleFrame2Ready, 
+      if ( _preloader ) {
+        _preloader.removeEventListener( FlexEvent.PRELOADER_DOC_FRAME_READY,
+					handleFrame2Ready,
+					false );
+				_preloader.removeEventListener( RSLEvent.RSL_COMPLETE,
+					handleRSLComplete,
 					false );
 
-				_preloader.removeEventListener( RSLEvent.RSL_COMPLETE, 
-					handleRSLComplete, 
-					false );
-			}
-			
+      }
+
 			_preloader = value;
+
+      // provide a way to load bytes unrelated to a frame
+      var parser:ByteParser = new ByteParser();
+      var swfContext:SwfContext = new SwfContext();
+      swfContext.originalUncompressedSwfBytes = new ByteArray();
+      swfContext.swfTags = new Vector.<SwfTag>();
+      var applier:IPatcherApplier = createApplier( new InvocationType( InvocationType.INIT, _preloader.loaderInfo.url ), swfContext );
+      applier.apply();
+
 
 			if ( _preloader ) {
 				_preloader.addEventListener( FlexEvent.PRELOADER_DOC_FRAME_READY, 
@@ -67,9 +78,6 @@ package org.mixingloom.managers {
 		}
 		
 		private function handleFrame2Ready( event:FlexEvent ):void {
-			var parser:ByteParser = new ByteParser();
-			frame2Context = parser.createSwfContext( _preloader.loaderInfo.bytes );
-
 			//We stop the systemManager from moving forward into frame 2
 			event.stopImmediatePropagation();
 
@@ -77,9 +85,22 @@ package org.mixingloom.managers {
 				handleFrame2Ready, 
 				false );
 
-			var applier:IPatcherApplier = createApplier( new InvocationType( InvocationType.FRAME2, null ), frame2Context );
-			applier.setCallBack( checkFrameContinue );
-			applier.apply();
+      checkFrame2Apply();
+    }
+
+    private function checkFrame2Apply():void
+    {
+      if (rslsComplete)
+      {
+        var parser:ByteParser = new ByteParser();
+        var frame2SwfContext:SwfContext = new SwfContext();
+        frame2SwfContext.originalUncompressedSwfBytes = parser.uncompressSwf( _preloader.loaderInfo.bytes );
+        frame2SwfContext.swfTags = parser.getFrameTwoTags(frame2SwfContext.originalUncompressedSwfBytes);
+
+        var applier:IPatcherApplier = createApplier( new InvocationType( InvocationType.FRAME2, _preloader.loaderInfo.url ), frame2SwfContext );
+        applier.setCallBack( moveToFrame2 );
+        applier.apply();
+      }
 		}
 		
 		private function removeRSLFromList( url:String ):void {
@@ -92,21 +113,14 @@ package org.mixingloom.managers {
 				}
 			}
 		}
-		
+
 		private function handleRSLComplete( event:RSLEvent ):void {
 			removeRSLFromList( event.url.url );
-			checkFrameContinue();
+
+			checkFrame2Apply();
 		}
 		
-		private function checkFrameContinue():void {
-			if ( rslsComplete ) {
-				var modifier:ModifiedByteLoader = new ModifiedByteLoader();
-				modifier.setCallBack( moveToFrame2 ); 
-				modifier.applyModificiations( frame2Context );
-			}
-		}
-		
-		private function moveToFrame2():void {
+		private function moveToFrame2(event:Event=null):void {
 			//we allow the system manager to move to frame 2
 			_preloader.dispatchEvent( new FlexEvent( FlexEvent.PRELOADER_DOC_FRAME_READY ) );
 		}

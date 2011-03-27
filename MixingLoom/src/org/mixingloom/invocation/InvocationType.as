@@ -3,6 +3,8 @@ package org.mixingloom.invocation {
 
 	public class InvocationType {
 
+    public static const INIT:String = "init";
+    public static const FRAME1:String = "frame1";
 		public static const FRAME2:String = "frame2";
 		public static const RSL:String = "rsl";
 		public static const MODULE:String = "module";

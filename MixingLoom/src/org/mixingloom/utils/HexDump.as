@@ -13,6 +13,7 @@ public class HexDump
   public static function dumpHex(bytes:ByteArray):String
   {
     var originalPos:uint = bytes.position;
+    bytes.position = 0;
 
     var s:String = "";
     var i:uint = 0;

@@ -10,8 +10,13 @@ import flash.utils.ByteArray;
 
 public class SwfContext
 {
-  public var swfBytes:ByteArray;
+  public var originalUncompressedSwfBytes:ByteArray;
   public var swfTags:Vector.<SwfTag>;
   public var swfInfos:*;
+
+  public function toString():String
+  {
+    return "originalUncompressedSwfBytes.length = " + originalUncompressedSwfBytes.length + " swfTags.length = " + swfTags.length;
+  }
 }
 }

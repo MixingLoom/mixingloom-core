@@ -13,17 +13,17 @@ package org.mixingloom.byteCode {
 
 	public class ModifiedByteLoader {
 		private var callBack:Function;
-		private var callBackArgs:Array;
+    public var loaderContext:LoaderContext;
+    public var forceLoad:Boolean = true;
 
-		protected function invokeCallBack():void {
+		protected function invokeCallBack(args:Array=null):void {
 			if ( callBack != null ) {
-				callBack.apply( null, callBackArgs );
+				callBack.apply(null, args);
 			}
 		}
 
-		public function setCallBack( value:Function, args:Array=null ):void {
+		public function setCallBack(value:Function):void {
 			this.callBack = value;
-			this.callBackArgs = args;
 		}
 		
 		public function applyModificiations( swfContext:SwfContext ):void {
@@ -46,7 +46,7 @@ package org.mixingloom.byteCode {
 			
 			for each (var swfTag:SwfTag in swfTags)
 			{
-				//trace('writing tag ' + swfTag.name);
+				trace('writing tag ' + swfTag.name + " " + swfTag.type);
 				//if (swfTag.modified)
 				//{
 				numTagsModified++;
@@ -55,13 +55,14 @@ package org.mixingloom.byteCode {
 				//}
 			}
 			
-			if (numTagsModified < 1)
+			if ((numTagsModified < 1) && (!forceLoad))
 			{
 				// just finish
 				invokeCallBack();
 				return;
 			}
-			
+
+      // show frame tag
 			modifiedBytes.writeByte(0x40);
 			modifiedBytes.writeByte(0);
 			
@@ -76,9 +77,12 @@ package org.mixingloom.byteCode {
 			modifiedBytes.position = 0;
 			
 			trace('modifiedBytes.length = ' + modifiedBytes.length);
-			
-			var loaderContext:LoaderContext = new LoaderContext();
-			loaderContext.applicationDomain = ApplicationDomain.currentDomain;
+
+      if (loaderContext == null)
+      {
+        loaderContext = new LoaderContext();
+        loaderContext.applicationDomain = ApplicationDomain.currentDomain;
+      }
 			
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleLoaderComplete);
@@ -88,15 +92,16 @@ package org.mixingloom.byteCode {
 		
 		private function handleLoaderComplete(event:Event):void
 		{
-			invokeCallBack();
+			invokeCallBack([event]);
 		}
 		
 		private function handleLoaderError(event:IOErrorEvent):void
 		{
-			invokeCallBack();
+			invokeCallBack([event]);
 		}
 		
 		public function ModifiedByteLoader() {
+      super();
 		}
 	}
 }

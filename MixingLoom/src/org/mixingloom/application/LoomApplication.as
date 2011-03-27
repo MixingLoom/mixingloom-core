@@ -1,6 +1,8 @@
 package org.mixingloom.application
 {
-	import spark.components.Application;
+import org.mixingloom.patcher.IPatcher;
+
+import spark.components.Application;
 	
 	[Frame(factoryClass="org.mixingloom.managers.LoomSystemManager")]
 	public class LoomApplication extends Application

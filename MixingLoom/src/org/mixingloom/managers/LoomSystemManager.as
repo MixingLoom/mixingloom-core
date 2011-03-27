@@ -11,8 +11,9 @@ package org.mixingloom.managers {
 	import mx.utils.LoaderUtil;
 	
 	import org.mixingloom.core.LoomCrossDomainRSLItem;
-	
-	use namespace mx_internal;
+import org.mixingloom.patcher.IPatcher;
+
+use namespace mx_internal;
 
 	public class LoomSystemManager extends SystemManager {
 
@@ -22,7 +23,7 @@ package org.mixingloom.managers {
 		override mx_internal function initialize():void {
 			var info:Object = info();
 
-			patchManager = createPatchManager();
+      patchManager = createPatchManager();
 
 			//Store the rsls
 			var rsls:Array = info["rsls"];

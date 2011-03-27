@@ -7,15 +7,6 @@ package org.mixingloom.byteCode {
 	import org.mixingloom.SwfTag;
 
 	public class ByteParser {
-
-		public function createSwfContext( input:ByteArray ):SwfContext {
-			var swfContext:SwfContext = new SwfContext();
-			
-			swfContext.swfBytes = uncompressSwf( input );
-			swfContext.swfTags = getFrameTwoTags( swfContext.swfBytes ); 
-			
-			return swfContext;
-		}
 		
 		public function uncompressSwf(input:ByteArray):ByteArray
 		{
@@ -47,28 +38,42 @@ package org.mixingloom.byteCode {
 			
 			return output;
 		}
-		
+
+    public function getFrameOneTags(byteArray:ByteArray):Vector.<SwfTag>
+		{
+			var allSwfTags:Object = getFrameTags(byteArray);
+
+			return allSwfTags[1];
+		}
+
 		public function getFrameTwoTags(byteArray:ByteArray):Vector.<SwfTag>
+		{
+			var allSwfTags:Object = getFrameTags(byteArray);
+			
+			return allSwfTags[2];
+		}
+
+    public function getFrameTags(byteArray:ByteArray):Object
 		{
 			var allSwfTags:Object = new Object();
 			var currentFrame:uint = 0;
-			
+
 			for each (var swfTag:SwfTag in getAllSwfTags(byteArray))
 			{
 				if (swfTag.type == 43)
 				{
 					currentFrame++;
 				}
-				
+
 				if (allSwfTags[currentFrame] == undefined)
 				{
 					allSwfTags[currentFrame] = new Vector.<SwfTag>();
 				}
-				
+
 				(allSwfTags[currentFrame]).push(swfTag);
 			}
-			
-			return allSwfTags[2];
+
+			return allSwfTags;
 		}
 		
 		public function getAllSwfTags(originalBytes:ByteArray):Vector.<SwfTag>
@@ -100,7 +105,13 @@ package org.mixingloom.byteCode {
 			// read the tags
 			while (originalBytes.position < (originalBytes.length - 2))
 			{
-				swfTags.push(readTag(originalBytes))
+        var swfTag:SwfTag = readTag(originalBytes);
+
+        // exclude the file attributes
+        if (swfTag.type != 69)
+        {
+				  swfTags.push(swfTag);
+        }
 			}
 			
 			originalBytes.position = 0;
@@ -146,6 +157,7 @@ package org.mixingloom.byteCode {
 		}
 		
 		public function ByteParser() {
+      super();
 		}
 	}
 }

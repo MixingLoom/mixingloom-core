@@ -21,8 +21,9 @@ package org.mixingloom.core
 	import mx.events.RSLEvent;
 	import mx.utils.LoaderUtil;
 	import mx.utils.SHA256;
-	
-	import org.mixingloom.SwfContext;
+
+import org.mixingloom.SwfContext;
+import org.mixingloom.SwfContext;
 	import org.mixingloom.byteCode.ByteParser;
 	import org.mixingloom.invocation.InvocationType;
 	import org.mixingloom.managers.IPatchManager;
@@ -41,7 +42,7 @@ package org.mixingloom.core
 		
 		// this reference to the loader keeps the loader from being garbage 
 		// collected before the complete event can be sent. 
-		private var loadBytesLoader:Loader; 
+		//private var loadBytesLoader:Loader;
 		
 		//    private var startTime:int;      // PERFORMANCE_INFO
 		
@@ -193,7 +194,7 @@ package org.mixingloom.core
 			}
 			
 			// load the bytes into the current application domain.
-			loadBytesLoader = new Loader();
+			//loadBytesLoader = new Loader();
 			var context:LoaderContext = new LoaderContext();
 			var rslData:RSLData = currentRSLData;
 			
@@ -261,19 +262,16 @@ package org.mixingloom.core
 			}
 
 			var parser:ByteParser = new ByteParser();
-			var swfContext:SwfContext = parser.createSwfContext( urlLoader.data );
+			var swfContext:SwfContext = new SwfContext();
+      swfContext.originalUncompressedSwfBytes = parser.uncompressSwf(urlLoader.data);
+      swfContext.swfTags = parser.getAllSwfTags(swfContext.originalUncompressedSwfBytes);
 
 			var applier:IPatcherApplier = patchManager.createApplier( new InvocationType( InvocationType.RSL, rslData.rslURL ), swfContext );
-			applier.setCallBack( loadBytes, [urlLoader.data, context] );
+      applier.loaderContext = context;
+			applier.setCallBack( loadBytesCompleteHandler );
 			applier.apply();
 
 			return true;
-		}
-		
-		private function loadBytes( bytes:ByteArray, context:LoaderContext ):void {
-			// load the rsl into memory
-			loadBytesLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadBytesCompleteHandler);
-			loadBytesLoader.loadBytes(bytes, context);
 		}
 		
 		
@@ -365,9 +363,7 @@ package org.mixingloom.core
 		 */ 
 		private function loadBytesCompleteHandler(event:Event):void
 		{
-			loadBytesLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, loadBytesCompleteHandler);
-			loadBytesLoader = null;
-			super.itemCompleteHandler(event);           
+			super.itemCompleteHandler(event);
 		}
 		
 		public function equalURL( url:String ):Boolean {
