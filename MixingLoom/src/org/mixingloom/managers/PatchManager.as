@@ -56,7 +56,6 @@ import mx.events.FlexEvent;
 			_preloader = value;
 
       // provide a way to load bytes unrelated to a frame
-      var parser:ByteParser = new ByteParser();
       var swfContext:SwfContext = new SwfContext();
       swfContext.originalUncompressedSwfBytes = new ByteArray();
       swfContext.swfTags = new Vector.<SwfTag>();
@@ -76,6 +75,11 @@ import mx.events.FlexEvent;
 					1000 );
 			}
 		}
+
+    public function get preloader():Preloader
+    {
+      return _preloader;
+    }
 		
 		private function handleFrame2Ready( event:FlexEvent ):void {
 			//We stop the systemManager from moving forward into frame 2

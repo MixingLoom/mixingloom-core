@@ -1,6 +1,4 @@
 package org.mixingloom.managers {
-	import mx.events.ModuleEvent;
-	import mx.events.RSLEvent;
 	import mx.preloaders.Preloader;
 	
 	import org.mixingloom.SwfContext;
@@ -13,6 +11,7 @@ package org.mixingloom.managers {
 		function createApplier( invocationType:InvocationType, swfContext:SwfContext ):IPatcherApplier;
 		function registerPatcher( patcher:IPatcher ):void;
 		function set preloader( value:Preloader ):void;
+    function get preloader():Preloader;
 		function set rslItemList( value:Array ):void;
 	}
 }

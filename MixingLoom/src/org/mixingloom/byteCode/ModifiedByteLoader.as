@@ -11,7 +11,9 @@ package org.mixingloom.byteCode {
 	import org.mixingloom.SwfTag;
 	import org.mixingloom.preloader.IPatchNotifier;
 
-	public class ModifiedByteLoader {
+import spark.components.Application;
+
+public class ModifiedByteLoader {
 		private var callBack:Function;
     public var loaderContext:LoaderContext;
     public var forceLoad:Boolean = true;
@@ -46,7 +48,7 @@ package org.mixingloom.byteCode {
 			
 			for each (var swfTag:SwfTag in swfTags)
 			{
-				trace('writing tag ' + swfTag.name + " " + swfTag.type);
+				//trace('writing tag ' + swfTag.name + " " + swfTag.type);
 				//if (swfTag.modified)
 				//{
 				numTagsModified++;

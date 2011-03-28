@@ -1,6 +1,7 @@
 package org.mixingloom.managers {
 	import flash.display.Loader;
-	import flash.system.ApplicationDomain;
+import flash.events.MouseEvent;
+import flash.system.ApplicationDomain;
 	
 	import mx.core.IFlexModuleFactory;
 	import mx.core.RSLData;
