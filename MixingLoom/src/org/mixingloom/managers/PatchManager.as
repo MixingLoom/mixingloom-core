@@ -19,6 +19,9 @@ import mx.events.FlexEvent;
 		private var patchers:Vector.<IPatcher>;
 		private var _preloader:Preloader;
 		private var _rslItemList:Array;
+    private var _kickedOffInit:Boolean = false;
+    private var _initReady:Boolean = false;
+    private var _frame2Ready:Boolean = false;
 		
 		public function createApplier( invocationType:InvocationType, swfContext:SwfContext ):IPatcherApplier {
 			var applier:IPatcherApplier = new PatcherApplierImpl();
@@ -55,14 +58,6 @@ import mx.events.FlexEvent;
 
 			_preloader = value;
 
-      // provide a way to load bytes unrelated to a frame
-      var swfContext:SwfContext = new SwfContext();
-      swfContext.originalUncompressedSwfBytes = new ByteArray();
-      swfContext.swfTags = new Vector.<SwfTag>();
-      var applier:IPatcherApplier = createApplier( new InvocationType( InvocationType.INIT, _preloader.loaderInfo.url ), swfContext );
-      applier.apply();
-
-
 			if ( _preloader ) {
 				_preloader.addEventListener( FlexEvent.PRELOADER_DOC_FRAME_READY, 
 										   handleFrame2Ready, 
@@ -74,14 +69,32 @@ import mx.events.FlexEvent;
 					false,
 					1000 );
 			}
+
+      trace('foo!');
+
+      // provide a way to load bytes unrelated to a frame
+      var swfContext:SwfContext = new SwfContext();
+      swfContext.originalUncompressedSwfBytes = new ByteArray();
+      swfContext.swfTags = new Vector.<SwfTag>();
+      var applier:IPatcherApplier = createApplier( new InvocationType( InvocationType.INIT, _preloader.loaderInfo.url ), swfContext );
+      applier.setCallBack(handleInitReady);
+      applier.apply();
 		}
 
     public function get preloader():Preloader
     {
       return _preloader;
     }
-		
+
+    private function handleInitReady( event:Event=null ):void {
+      _initReady = true;
+
+      checkFrame2Apply();
+    }
+
 		private function handleFrame2Ready( event:FlexEvent ):void {
+      _frame2Ready = true;
+
 			//We stop the systemManager from moving forward into frame 2
 			event.stopImmediatePropagation();
 
@@ -94,7 +107,7 @@ import mx.events.FlexEvent;
 
     private function checkFrame2Apply():void
     {
-      if (rslsComplete)
+      if ((rslsComplete) && (_initReady) && (_frame2Ready)) 
       {
         var parser:ByteParser = new ByteParser();
         var frame2SwfContext:SwfContext = new SwfContext();

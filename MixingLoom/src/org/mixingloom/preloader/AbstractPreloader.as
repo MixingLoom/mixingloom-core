@@ -14,7 +14,7 @@ package org.mixingloom.preloader {
 
 		public function get patchManager():IPatchManager {
 			if ( !_patchManager ) {
-				_patchManager = createPatchManager();
+				patchManager = createPatchManager();
 			}
 			return _patchManager;
 		}
