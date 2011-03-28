@@ -11,5 +11,7 @@
     <classEntry path="org.mixingloom.byteLoader.ModifiedByteLoader"/>
   </includeClasses>
   <includeResources/>
-  <namespaceManifests/>
+  <namespaceManifests>
+    <namespaceManifestEntry manifest="C:/github/mixingloom-core/MixingLoom/loom-manifest.xml" namespace="library://ns.mixingloom.org/flex/spark"/>
+  </namespaceManifests>
 </flexLibProperties>
