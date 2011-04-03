@@ -10,8 +10,9 @@ package org.mixingloom.managers {
 
 		function createApplier( invocationType:InvocationType, swfContext:SwfContext ):IPatcherApplier;
 		function registerPatcher( patcher:IPatcher ):void;
+		function cleanUpManager():void;
 		function set preloader( value:Preloader ):void;
-    function get preloader():Preloader;
+    	function get preloader():Preloader;
 		function set rslItemList( value:Array ):void;
 	}
 }

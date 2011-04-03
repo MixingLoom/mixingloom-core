@@ -1,7 +1,7 @@
 package org.mixingloom.managers {
 	import flash.display.Loader;
-import flash.events.MouseEvent;
-import flash.system.ApplicationDomain;
+	import flash.events.MouseEvent;
+	import flash.system.ApplicationDomain;
 	
 	import mx.core.IFlexModuleFactory;
 	import mx.core.RSLData;
@@ -12,34 +12,34 @@ import flash.system.ApplicationDomain;
 	import mx.utils.LoaderUtil;
 	
 	import org.mixingloom.core.LoomCrossDomainRSLItem;
-import org.mixingloom.patcher.IPatcher;
-
-use namespace mx_internal;
-
+	import org.mixingloom.patcher.IPatcher;
+	
+	use namespace mx_internal;
+	
 	public class LoomSystemManager extends SystemManager {
-
+		
 		private var rslDataList:Array;
 		private var patchManager:IPatchManager;
-
+		
 		override mx_internal function initialize():void {
 			var info:Object = info();
-
-      patchManager = createPatchManager();
-
+			
+			patchManager = createPatchManager();
+			
 			//Store the rsls
 			var rsls:Array = info["rsls"];
 			var cdRsls:Array = info["cdRsls"];
-
+			
 			//Rsls, what rsls?
 			info[ "cdRsls" ] = [];
 			info[ "rsls" ] = [];
-
+			
 			//Store the module url list
 			var resourceModuleURLList:String =
 				loaderInfo.parameters["resourceModuleURLs"];
 			var resourceModuleURLs:Array =
 				resourceModuleURLList ? resourceModuleURLList.split(",") : null;
-
+			
 			//url list? what url list
 			loaderInfo.parameters["resourceModuleURLs"] = "";
 			
@@ -48,30 +48,30 @@ use namespace mx_internal;
 				usePreloaderDisplay = info["usePreloader"];
 			
 			var preloaderDisplayClass:Class = info["preloader"] as Class;
-
+			
 			//turns out we don't want your preloader display
-			delete info[ "usePreloader" ];
-
+			info[ "usePreloader" ] = false;;
+			
 			var domain:ApplicationDomain =
 				!topLevel && parent is Loader ?
 				Loader(parent).contentLoaderInfo.applicationDomain :
 				info["currentDomain"] as ApplicationDomain;
-
+			
 			super.initialize();
 			
 			//Okay, now, how you might actually write code
 			var rslItemList:Array = createRSLItemList( patchManager, rsls, cdRsls );
-
+			
 			patchManager.preloader = preloader;
 			patchManager.rslItemList = rslItemList; 
-
+			
 			reInitPreloader( patchManager, usePreloaderDisplay, preloaderDisplayClass, rslItemList, resourceModuleURLs, domain );
 		}
 		
 		protected function reInitPreloader( patchManager:IPatchManager, usePreloaderDisplay:Boolean, preloaderDisplayClass:Class, rslItemList:Array, resourceModuleURLs:Array, domain:ApplicationDomain = null  ):void {
 			preloader.addEventListener(RSLEvent.RSL_COMPLETE, 
 				preloader_rslCompleteHandler, false, 1000 );
-
+			
 			// Initialize the preloader.
 			preloader.initialize(
 				usePreloaderDisplay,
@@ -95,7 +95,7 @@ use namespace mx_internal;
 				}
 			}
 		}
-
+		
 		protected function createRSLItemList( patchManager:IPatchManager, rsls:Array, cdRsls:Array ):Array {
 			// Put cross-domain RSL information in the RSL list.
 			var rslItemList:Array = [];
@@ -139,19 +139,19 @@ use namespace mx_internal;
 			
 			return rslItemList;
 		}
-
+		
 		protected function createCrossDomainRSLItem( patchManager:IPatchManager,
 													 rsls:Array,
 													 rootURL:String = null,
 													 moduleFactory:IFlexModuleFactory = null ):RSLItem {
 			return new LoomCrossDomainRSLItem( patchManager, rsls, rootURL, moduleFactory);
 		}
-
+		
 		
 		protected function createPatchManager():IPatchManager {
 			return new PatchManager();
 		}
-
+		
 		/**
 		 *  @private
 		 *  The preloader has completed loading an RSL.
@@ -160,7 +160,7 @@ use namespace mx_internal;
 			//We need to prevent the copy in the original system manager from getting
 			//this event
 			event.stopImmediatePropagation();
-
+			
 			if (!event.isResourceModule && event.loaderInfo) {
 				var rsl:Vector.<RSLData> = Vector.<RSLData>(rslDataList[event.rslIndex]);
 				var moduleFactory:IFlexModuleFactory = this;
@@ -173,7 +173,7 @@ use namespace mx_internal;
 					moduleFactory.addPreloadedRSL(event.loaderInfo, rsl);
 			}
 		}
-
+		
 		public function LoomSystemManager() {
 			super();
 		}
