@@ -37,7 +37,7 @@ package org.mixingloom.preloader {
 		override public function set preloader(value:Sprite):void {
 			//In a preloader only scenario, we will get here and need to make our
 			//own patchmanager
-			if ( !_patchManager ) {
+			if ( !_patchManager ) { 
 				patchManager = createPatchManager();
 			}
 			
@@ -67,6 +67,8 @@ package org.mixingloom.preloader {
 			timer.removeEventListener( TimerEvent.TIMER_COMPLETE, handleTimerComplete );
 
 			setupPatchers( patchManager );
+
+            patchManager.patchersReady();
 		}
 
 		protected function setupPatchers( manager:IPatchManager ):void {

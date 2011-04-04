@@ -14,5 +14,6 @@ package org.mixingloom.managers {
 		function set preloader( value:Preloader ):void;
     	function get preloader():Preloader;
 		function set rslItemList( value:Array ):void;
+        function patchersReady():void;
 	}
 }

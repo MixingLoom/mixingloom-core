@@ -69,16 +69,6 @@ package org.mixingloom.managers {
 					false,
 					1000 );
 			}
-			
-			trace('foo!');
-			
-			// provide a way to load bytes unrelated to a frame
-			var swfContext:SwfContext = new SwfContext();
-			swfContext.originalUncompressedSwfBytes = new ByteArray();
-			swfContext.swfTags = new Vector.<SwfTag>();
-			var applier:IPatcherApplier = createApplier( new InvocationType( InvocationType.INIT, _preloader.loaderInfo.url ), swfContext );
-			applier.setCallBack(handleInitReady);
-			applier.apply();
 		}
 		
 		public function get preloader():Preloader
@@ -153,6 +143,16 @@ package org.mixingloom.managers {
 			//we allow the system manager to move to frame 2
 			_preloader.dispatchEvent( new FlexEvent( FlexEvent.PRELOADER_DOC_FRAME_READY ) );
 		}
+
+        public function patchersReady():void {
+			// provide a way to load bytes unrelated to a frame
+			var swfContext:SwfContext = new SwfContext();
+			swfContext.originalUncompressedSwfBytes = new ByteArray();
+			swfContext.swfTags = new Vector.<SwfTag>();
+			var applier:IPatcherApplier = createApplier( new InvocationType( InvocationType.INIT, _preloader.loaderInfo.url ), swfContext );
+			applier.setCallBack(handleInitReady);
+			applier.apply();
+        }
 		
 		public function PatchManager() {
 			patchers = new Vector.<IPatcher>();
