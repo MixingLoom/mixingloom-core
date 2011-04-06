@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark">
+
+    <fx:Script>
+        import org.mixingloom.byteCode.ByteParser;
+
+        private var uncompressedSwf:ByteArray;
+
+        private function selectFile(event:Event):void {
+            var existingFile:File = event.target as File;
+
+            var stream:FileStream = new FileStream();
+            stream.open(existingFile, FileMode.READ);
+
+            var ba:ByteArray = new ByteArray();
+            stream.readBytes(ba);
+
+            var bp:ByteParser  = new ByteParser();
+            uncompressedSwf = bp.uncompressSwf(ba);
+
+            existingFile.addEventListener(Event.SELECT, saveFile);
+            existingFile.browseForSave("Save as");
+        }
+
+        private function saveFile(event:Event):void {
+            var newFile:File = event.target as File;
+            var stream:FileStream = new FileStream();
+            stream.open(newFile, FileMode.WRITE);
+            stream.writeBytes(uncompressedSwf);
+            stream.close();
+        }
+
+    </fx:Script>
+
+    <s:applicationComplete>
+        var f:File = File.desktopDirectory;
+        f.addEventListener(Event.SELECT, selectFile);
+        f.browseForOpen("Open SWF File", [new FileFilter("swf", "*.swf")]);
+    </s:applicationComplete>
+
+</s:WindowedApplication>
