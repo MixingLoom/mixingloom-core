@@ -7,23 +7,61 @@
 package org.mixingloom.utils {
 import flash.utils.ByteArray;
 
+// todo: unit test this bitch
 public class ByteArrayUtils {
-    
+
+    public static function findAndReplace(haystack:ByteArray, needle:ByteArray, replacement:ByteArray):ByteArray
+    {
+        var indexOfNeedle:int = indexOf(haystack, needle);
+
+        if (indexOfNeedle == -1)
+        {
+            return haystack;
+        }
+
+        var newByteArray:ByteArray = new ByteArray();
+        newByteArray.writeBytes(haystack, 0, indexOfNeedle);
+        newByteArray.writeBytes(replacement);
+        newByteArray.writeBytes(haystack, indexOfNeedle + needle.length);
+
+        return newByteArray;
+    }
+
+    public static function subByteArray(byteArray:ByteArray, start:uint, length:uint):ByteArray
+    {
+        var sub:ByteArray = new ByteArray();
+        sub.writeBytes(byteArray, start,  length);
+        return sub;
+    }
+
+
     public static function indexOf(haystack:ByteArray, needle:ByteArray):int {
 
         if (haystack.length < needle.length) {
             throw new Error("the needle length must be less than or equal to the haystack length");
         }
 
-        for (var i:uint = 0; i < (haystack.length - needle.length - 1); i++) {
-            haystack.position = i;
+        var haystackPos:uint = haystack.position;
+        var needlePos:uint = needle.position;
 
-            var testByteArray:ByteArray = new ByteArray();
-            haystack.readBytes(testByteArray, 0, needle.length);
+        haystack.position = 0;
+        needle.position = 0;
 
-            needle.position = 0;
-            if (equals(testByteArray, needle)) {
-                return i;
+        var count:uint = 0;
+        for (var i:uint = 0; i < haystack.length; i++)
+        {
+            if (haystack[i] == needle[count])
+            {
+                count++;
+            }
+            else
+            {
+                count = 0;
+            }
+
+            if (count == needle.length)
+            {
+                return (i - count + 1);
             }
         }
 
