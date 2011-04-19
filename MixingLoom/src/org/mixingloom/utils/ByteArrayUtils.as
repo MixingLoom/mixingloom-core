@@ -10,7 +10,7 @@ import flash.utils.ByteArray;
 // todo: unit test this bitch
 public class ByteArrayUtils {
 
-    public static function findAndReplace(haystack:ByteArray, needle:ByteArray, replacement:ByteArray):ByteArray
+    public static function findAndReplaceFirstOccurrence(haystack:ByteArray, needle:ByteArray, replacement:ByteArray):ByteArray
     {
         var indexOfNeedle:int = indexOf(haystack, needle);
 
@@ -20,9 +20,16 @@ public class ByteArrayUtils {
         }
 
         var newByteArray:ByteArray = new ByteArray();
-        newByteArray.writeBytes(haystack, 0, indexOfNeedle);
+        if (indexOfNeedle > 0)
+        {
+            newByteArray.writeBytes(haystack, 0, indexOfNeedle);
+        }
+
         newByteArray.writeBytes(replacement);
+
         newByteArray.writeBytes(haystack, indexOfNeedle + needle.length);
+
+        newByteArray.position = 0;
 
         return newByteArray;
     }

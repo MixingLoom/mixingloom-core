@@ -9,19 +9,10 @@ package org.mixingloom.tests
 
 import org.flexunit.asserts.assertTrue;
 import org.mixingloom.SwfContext;
-import org.mixingloom.byteLoader.ModifiedByteLoader;
 
 public class ModifiedByteLoaderTest
 {
 
-  [Test]
-  public function applyModifications()
-  {
-    var modifiedByteLoader:ModifiedByteLoader = new ModifiedByteLoader();
-    modifiedByteLoader.notifier = new MockPatchNotifier();
-    modifiedByteLoader.applyModificiations(new SwfContext());
-    assertTrue(true);
-  }
 
 }
 }
