@@ -13,12 +13,12 @@ import mx.managers.SystemManagerGlobals;
 
 import org.mixingloom.SwfContext;
 import org.mixingloom.SwfTag;
+import org.mixingloom.utils.HexDump;
 
 
 public class ModifiedByteLoader {
     private var callBack:Function;
     public var loaderContext:LoaderContext;
-    public var forceLoad:Boolean = true;
 
     protected function invokeCallBack(args:Array=null):void {
         if ( callBack != null ) {
@@ -31,8 +31,12 @@ public class ModifiedByteLoader {
     }
 
     public function applyModificiations( swfContext:SwfContext ):void {
-        var swfTags:Vector.<SwfTag> = swfContext.swfTags;
-        var numTagsModified:uint = 0;
+
+        if (swfContext.swfTags.length <= 0)
+        {
+            invokeCallBack();
+            return;
+        }
 
         var modifiedBytes:ByteArray = new ByteArray();
         modifiedBytes.endian = Endian.LITTLE_ENDIAN;
@@ -48,22 +52,9 @@ public class ModifiedByteLoader {
             modifiedBytes.writeByte(fileAttrByte);
         }
 
-        for each (var swfTag:SwfTag in swfTags)
+        for each (var swfTag:SwfTag in swfContext.swfTags)
         {
-            //trace('writing tag ' + swfTag.name + " " + swfTag.type);
-            //if (swfTag.modified)
-            //{
-            numTagsModified++;
-            modifiedBytes.writeBytes(swfTag.recordHeader);
-            modifiedBytes.writeBytes(swfTag.tagBody);
-            //}
-        }
-
-        if ((numTagsModified < 1) && (!forceLoad))
-        {
-            // just finish
-            invokeCallBack();
-            return;
+            modifiedBytes.writeBytes(swfTag.fullTag);
         }
 
         // show frame tag
@@ -79,8 +70,6 @@ public class ModifiedByteLoader {
         modifiedBytes.writeUnsignedInt(modifiedBytes.length);
 
         modifiedBytes.position = 0;
-
-        trace('modifiedBytes.length = ' + modifiedBytes.length);
 
         // todo: would be nice to have a way when debugging to save the modified bytes for later download
         /*

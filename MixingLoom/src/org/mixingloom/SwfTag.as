@@ -4,33 +4,47 @@
  * Date: 3/14/11
  * Time: 5:00 PM
  */
-package
-org.mixingloom{
+package org.mixingloom
+{
 import flash.utils.ByteArray;
 import flash.utils.Endian;
+
+import org.mixingloom.utils.HexDump;
 
 public class SwfTag
 {
 
-  public function SwfTag()
-  {
-    recordHeader = new ByteArray();
-    recordHeader.endian = Endian.LITTLE_ENDIAN;
-    name = new String();
-    modified = false;
-  }
+    public var name:String;
 
-  public var name:String;
+    public var type:uint;
 
-  public var type:uint;
+    public var tagBody:ByteArray;
 
-  public var tagLengthExcludingRecordHeader:uint;
+    
+    public function get fullTag():ByteArray
+    {
+        var fullTag:ByteArray = new ByteArray();
+        fullTag.endian = Endian.LITTLE_ENDIAN;
 
-  public var tagBody:ByteArray;
+        var tagCodeAndLength:uint = 0;
+        tagCodeAndLength = type << 6;
 
-  public var recordHeader:ByteArray;
+        if (tagBody.length <= 62)
+        {
+            tagCodeAndLength |= tagBody.length;
+            fullTag.writeShort(tagCodeAndLength);
+        }
+        else
+        {
+            tagCodeAndLength |= 0x3f;
+            fullTag.writeShort(tagCodeAndLength);
+            fullTag.writeInt(tagBody.length);
+        }
 
-  public var modified:Boolean;
+        fullTag.writeBytes(tagBody);
+
+        return fullTag;
+    }
 
 }
 }

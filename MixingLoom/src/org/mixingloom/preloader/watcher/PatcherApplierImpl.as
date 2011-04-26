@@ -38,7 +38,6 @@ public class PatcherApplierImpl implements IPatcherApplier {
 
     public function set swfContext(value:SwfContext):void
     {
-        trace(value.toString());
         _swfContext = value;
     }
 
@@ -57,9 +56,6 @@ public class PatcherApplierImpl implements IPatcherApplier {
 
 
     public function apply():void {
-
-        trace( invocationType.type + ' ' + invocationType.url  );
-        //applyingPatch = true;
         startNextPatch();
     }
 
