@@ -124,6 +124,7 @@ package org.mixingloom.managers {
 		
 		private function removeRSLFromList( url:String ):void {
 			var rsl:LoomCrossDomainRSLItem;
+			if (_rslItemList != null)
 			for ( var i:int=0; i<_rslItemList.length; i++ ) {
 				rsl = _rslItemList[ i ] as LoomCrossDomainRSLItem;
 				if ( rsl.equalURL( url ) ) {
