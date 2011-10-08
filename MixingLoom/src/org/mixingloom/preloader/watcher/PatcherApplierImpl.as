@@ -1,5 +1,5 @@
 package org.mixingloom.preloader.watcher {
-import avmplus.accessorXml;
+
 
 import flash.system.LoaderContext;
 
